@@ -1,0 +1,140 @@
+# Global physical constants
+physical_constants:
+  R: 8.314  # J K^-1 mol^-1, Gas universal constant from Table 1
+  F: 96485  # C mol^-1, Faraday constant from Table 1
+  V0_rev: 1.229 # V, Standard reversible voltage at 25°C (298.15 K), often derived from ΔG^0_f,H2O. Explicitly needed for Nernst equation (Eq. 1).
+
+# Model parameters explicitly provided in the paper (Table 1 and text)
+model_parameters:
+  # Activation Overpotential (Eqs. 3, 4)
+  anode_charge_transfer_coefficient: 0.8 # alpha_a from Table 1
+  cathode_charge_transfer_coefficient: 0.25 # alpha_c from Table 1
+  # Note: J_0,an and J_0,cat are given as fixed values in Table 1 for direct use in V_act,
+  # despite k_0,i and E_act,i implying an Arrhenius dependence (see 'unclear_points').
+  anode_exchange_current_density_ref: 8.4e-07 # A m^-2 (8.4x10^-11 A cm^-2 * 10000) from Table 1 (J_0,an)
+  cathode_exchange_current_density_ref: 32240.0 # A m^-2 (3.224 A cm^-2 * 10000) from Table 1 (J_0,cat)
+  anode_activation_energy: 62836.0 # J mol^-1 from Table 1 (E_act,a)
+  cathode_activation_energy: 24359.0 # J mol^-1 from Table 1 (E_act,c)
+  anode_reaction_rate_coefficient: 0.00463 # mol K^-1 s^-1 m^-2 from Table 1 (k_0,a)
+  cathode_reaction_rate_coefficient: 0.01 # mol K^-1 s^-1 m^-2 from Table 1 (k_0,c)
+
+  # Ohmic Overpotential - Specific Resistances (Eqs. 8, 13, 14)
+  electrode_specific_resistance: 1.06e-07 # Ohm m (10.6x10^-6 Ohm cm * 0.01) from Table 1 (r_el)
+  anode_plate_specific_resistance: 4.31e-07 # Ohm m (43.1x10^-6 Ohm cm * 0.01) from Table 1 (r_an,p)
+  cathode_plate_specific_resistance: 1.6e-04 # Ohm m (16.0x10^-3 Ohm cm * 0.01) from Table 1 (r_cat,p)
+
+  # Concentration Overpotential - Molecular/Diffusion Parameters (Eqs. 30, 31)
+  h2_molecular_radius: 2.827e-10 # m (2.827 Angstrom * 1e-10) from Table 1 (sigma_H2)
+  o2_molecular_radius: 3.467e-10 # m (3.467 Angstrom * 1e-10) from Table 1 (sigma_O2)
+  h2o_molecular_radius: 2.641e-10 # m (2.641 Angstrom * 1e-10) from Table 1 (sigma_H2O)
+  o2_h2o_lennard_jones_potential_k: 106.7 # K (epsilon_O2-H2O/k) from Table 1
+  h2_h2o_lennard_jones_potential_k: 59.7 # K (epsilon_H2-H2O/k) from Table 1
+  average_pore_radius: 0.001 # m (1 mm * 0.001) from Table 1 (r). NOTE: Unusually large value for electrode pores, used as given.
+  h2o_molar_concentration: 37000.0 # mol m^-3 from Table 1 (C(H2O)). Appears to be a constant water concentration in membrane.
+
+  # Gas Crossover Parameters (Eqs. 47-50, 52-57)
+  h2_solubility: 0.072 # mol m^-3 bar^-1 (0.72x10^-1 mol m^-3 bar^-1) from Table 1 (S_H2)
+  o2_solubility: 0.08 # mol m^-3 bar^-1 (0.8x10^-1 mol m^-3 bar^-1) from Table 1 (S_O2)
+  h2_partial_pressure_enhancement_factor: 2.4e-04 # bar m^2 A^-1 from Table 1 (A_H2)
+  o2_partial_pressure_enhancement_factor: 2.8e-04 # bar m^2 A^-1 from Table 1 (A_O2)
+  h2_diffusion_constant_conc_diff: 4.65e-09 # mol m^-1 s^-1 bar^-1 from Table 1 (epsilon_dif,H2)
+  o2_diffusion_constant_conc_diff: 2.0e-09 # mol m^-1 s^-1 bar^-1 from Table 1 (epsilon_dif,O2)
+  h2_diffusion_constant_press_diff: 2.0e-09 # mol m^-1 s^-1 bar^-1 from Table 1 (epsilon_dp,H2)
+  h2_crossover_z: 2 # Assumed value for 'z' (number of electrons) for H2 in electro-osmotic drag flux (Eq. 47)
+  o2_crossover_z: 4 # Assumed value for 'z' (number of electrons) for O2 in electro-osmotic drag flux (Eq. 48)
+
+# Missing parameters identified in the plan, for which typical values are assumed for reproduction.
+# These values are NOT explicitly stated in the paper's Table 1 or text unless noted.
+assumed_parameters:
+  # Electrode & Geometric Parameters
+  electrode_porosity: 0.5 # epsilon (Assumed typical value 0.4-0.6 as per plan)
+  electrode_thickness: 0.00015 # m (150 um * 1e-6, assumed for d_el, d_an_el, d_cat_el)
+  channel_width: 0.001 # m (1 mm, assumed typical for w_c)
+  channel_support_width: 0.001 # m (1 mm, assumed typical for w_s)
+  anode_channel_height: 0.001 # m (1 mm, assumed typical for h_an_c)
+  cathode_channel_height: 0.001 # m (1 mm, assumed typical for h_cat_c)
+  anode_num_channels: 20 # (Assumed typical for n_an_ch in a small cell)
+  cathode_num_channels: 20 # (Assumed typical for n_cat_ch in a small cell)
+  anode_num_channel_supports: 20 # (Assumed typical for n_s_ch_an, e.g., similar to num_channels)
+  cathode_num_channel_supports: 20 # (Assumed typical for n_s_ch_cat, e.g., similar to num_channels)
+  mea_width: 0.1 # m (Assumed for W, e.g. for a 10x10 cm active area cell)
+  mea_length: 0.1 # m (Assumed for L, e.g. for a 10x10 cm active area cell)
+  active_surface_area: 0.01 # m^2 (Calculated as mea_width * mea_length)
+
+  # Membrane & Water Transport Parameters
+  membrane_water_content_lambda: 18.0 # lambda (Assumed constant for Nafion, typical 14-22, critical for sigma_mem Eq. 19)
+  water_diffusion_coefficient_membrane: 3.1e-10 # m^2/s (D_w, Assumed typical for water in Nafion)
+  electro_osmosis_coefficient: 1.5 # n_d (Assumed typical for Nafion, 1-2.5)
+  darcy_permeability_membrane: 1.0e-19 # m^2 (K_Darcy, Assumed typical for Nafion, 10^-18 to 10^-20 m^2)
+  water_viscosity_ref: 3.54e-04 # Pa s (mu_H2O, Assumed water viscosity at 353K/80C)
+
+  # Diffusion and Molar Mass Parameters
+  diffusion_collision_integral_omega_d: 1.0 # Omega_D (Assumed approx 1, lacking explicit correlation or value)
+  molar_mass_oxygen: 0.032 # kg/mol (Standard molar mass of O2)
+  molar_mass_hydrogen: 0.002 # kg/mol (Standard molar mass of H2)
+  molar_mass_water: 0.018 # kg/mol (Standard molar mass of H2O)
+  # Standard concentrations C0_O2, C0_H2 are typically calculated from partial pressures and temperature via ideal gas law.
+  # electrode_porosity_tortuosity_ratio (epsilon_x) is assumed equal to electrode_porosity (epsilon) as per plan interpretation.
+
+# Operating conditions for simulation and validation
+operating_conditions:
+  # Base conditions (can be overridden by specific validation cases or sensitivity ranges)
+  base_temperature_K: 353.0 # K (80 C)
+  base_anode_pressure_bar: 1.0 # bar
+  base_cathode_pressure_bar: 1.0 # bar
+  base_membrane_thickness_um: 100.0 # um (A reasonable mid-point for general simulation)
+  current_density_range_Am2:
+    start: 0.0
+    end: 20000.0 # A/m^2, as per figures in the paper (e.g., 2 A/cm^2)
+    num_points: 100 # Number of points for polarization curve
+
+# Experimental validation cases from the paper
+validation_cases:
+  ioroi_et_al_case:
+    name: "Ioroi et al. [30] (Fig. 2a)"
+    temperature_K: 353.0
+    membrane_thickness_um: 50.0
+    anode_pressure_bar: 1.0
+    cathode_pressure_bar: 1.0
+    data_file: "ioroi_exp_data.csv" # Placeholder for experimental data file
+    expected_deviation_pct: 2.0 # Maximum expected deviation stated in plan
+
+  deb_et_al_case:
+    name: "Deb et al. [31] (Fig. 2b)"
+    temperature_K: 353.0
+    membrane_thickness_um: 178.0
+    anode_pressure_bar: 1.013 # 1 atm ≈ 1.013 bar
+    cathode_pressure_bar: 13.78 # 13.6 atm * 1.01325 bar/atm ≈ 13.78 bar
+    data_file: "deb_exp_data.csv" # Placeholder for experimental data file
+    expected_deviation_pct: 5.0 # Maximum expected deviation stated in plan
+
+# Sensitivity analysis ranges as described in the paper
+sensitivity_analysis_ranges:
+  membrane_thickness_um: # Range for Fig. 3, 6a, 6b
+    min: 50.0
+    max: 300.0
+    num_points: 6 # E.g., 50, 100, 150, 200, 250, 300
+  cathode_pressure_bar: # Range for Fig. 4, 7
+    min: 1.0
+    max: 40.0
+    num_points: 40 # E.g., 1, 5, 10, ... 40, or a step size for more points
+  temperature_K: # Range for Fig. 5
+    min: 333.0
+    max: 363.0
+    num_points: 7 # E.g., 333, 338, ... 363 (5K steps)
+
+# Safety parameters mentioned in the context of H2 crossover
+safety_thresholds:
+  h2_in_o2_flammability_limit_pct: 4.0 # Typical <4% hydrogen in oxygen
+
+# Ambiguities, clarifications, or potential issues identified during parsing of the paper's model
+unclear_points:
+  j0i_temperature_dependence: "The temperature dependence of J_0,i (exchange current densities) is ambiguous. Despite activation energies (E_act,i) and reaction rate coefficients (k_0,i) being listed in Table 1, no explicit Arrhenius-type equation (e.g., J_0,i = k_0,i * exp(-E_act,i / (R*T))) is provided with the activation overpotential formulas (Eqs. 3, 4). This requires an assumption on whether the given J_0,i are fixed values valid at the operating temperature (e.g., 353 K) or if they are pre-exponential factors for a temperature-dependent correlation."
+  knudsen_diffusion_eq_32_typo: "Equation 32 for Knudsen diffusion contains 'F' (Faraday constant) in its numerator, which is highly unusual for a diffusion coefficient formula. It is likely a typo and should be 'R' (Gas constant) or another numerical constant, as is standard in Knudsen diffusion equations (e.g., D_K = (2/3)r * sqrt(8RT / (pi*M)) )."
+  pcath2_eq_53_complexity: "Equation 53 for P_cat,H2 (partial pressure of hydrogen at cathode) is highly convoluted and appears to be a mixed definition incorporating enhancement factors. Its exact physical interpretation and precise implementation logic requires careful parsing and cross-verification with the cited literature [5] for full fidelity."
+  h2_crossover_percentage_eq_57_denominator: "The term J/(4F) in the denominator of Equation 57 (for calculating H2 crossover percentage) needs explicit clarification. J/(4F) typically represents the molar flow rate of oxygen produced at the anode, not related to the total amount of hydrogen at the anode. If the denominator is intended to represent the total molar flux of gas at the anode (oxygen produced + crossover hydrogen), this term might be a typo for J/(2F) (stoichiometric hydrogen production equivalent) or a specific convention of the paper."
+  total_gas_flux_equations_54_56_completeness: "The paper states that gas crossover phenomena include electro-osmotic drag, concentration difference, and differential pressure. However, the final 'total flux' equations (54 for H2, 56 for O2) only explicitly show contributions from electro-osmosis and diffusion (driven by partial pressure, similar to epsilon_dif * Delta P). The separate 'pressure difference' term (N_dp,H2 from Eq. 50) is not directly included in the summation, raising a question about whether N_en sums all three contributions or only specific ones. This requires careful interpretation for accurate reproduction of the 'total flux density'."
+
+solver_parameters:
+  solver_max_iterations: 1000
+  solver_tolerance: 1e-6
